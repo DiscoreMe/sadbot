@@ -2,6 +2,7 @@ package bot
 
 import (
 	"github.com/DiscoreMe/sadbot/cache"
+	"github.com/DiscoreMe/sadbot/calculator"
 	"github.com/DiscoreMe/sadbot/dict"
 	"github.com/DiscoreMe/sadbot/weather"
 	tb "gopkg.in/tucnak/telebot.v2"
@@ -11,10 +12,11 @@ import (
 )
 
 type Bot struct {
-	bot *tb.Bot
-	w   *weather.Weather
-	c   *cache.Cache
-	d   *dict.Dict
+	bot  *tb.Bot
+	w    *weather.Weather
+	c    *cache.Cache
+	d    *dict.Dict
+	calc *calculator.Cal
 }
 
 type BotSettings struct {
@@ -22,6 +24,7 @@ type BotSettings struct {
 	Weather *weather.Weather
 	Cache   *cache.Cache
 	Dict    *dict.Dict
+	Calc    *calculator.Cal
 }
 
 func NewBot(settings BotSettings) (*Bot, error) {
@@ -33,7 +36,13 @@ func NewBot(settings BotSettings) (*Bot, error) {
 		return nil, err
 	}
 
-	bot := &Bot{bot: b, c: settings.Cache, d: settings.Dict, w: settings.Weather}
+	bot := &Bot{
+		bot:  b,
+		c:    settings.Cache,
+		d:    settings.Dict,
+		w:    settings.Weather,
+		calc: settings.Calc,
+	}
 	bot.setup()
 
 	return bot, nil
@@ -70,6 +79,8 @@ func (b *Bot) CmdHandler(m *tb.Message) {
 		b.SpeakAddHandler(m)
 	case "эбауте":
 		b.about(m)
+	case "кл":
+		b.CalcHandler(m)
 	default:
 		b.SpeakHandler(m)
 	}
