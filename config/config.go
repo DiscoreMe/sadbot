@@ -9,14 +9,21 @@ import (
 )
 
 type Config struct {
-	Redis            RedisConfig `mapstructure:"redis"`
-	Token            string      `mapstructure:"token"`
-	OpenWeatherToken string      `mapstructure:"open_weather_token"`
+	Redis            RedisConfig  `mapstructure:"redis"`
+	Token            string       `mapstructure:"token"`
+	OpenWeatherToken string       `mapstructure:"open_weather_token"`
+	Screen           ScreenConfig `mapstructure:"screen"`
 }
 
 type RedisConfig struct {
 	Address  string `mapstructure:"address"`
 	Password string `mapstructure:"password"`
+}
+
+// ScreenConfig provides data for creating screenshots of sites.
+type ScreenConfig struct {
+	Token string `mapstructure:"token"`
+	URL   string `mapstructure:"url"`
 }
 
 func (r *RedisConfig) ConnectRedis() *redis.Client {
@@ -45,6 +52,8 @@ func New() *Config {
 
 	viper.SetDefault("redis.address", "127.0.0.1:6379")
 	viper.SetDefault("redis.password", "")
+	viper.SetDefault("screen.token", "qwerty")
+	viper.SetDefault("screen.url", "http://127.0.0.1")
 
 	viper.SetDefault("token", "123456:qwerty")
 	viper.SetDefault("open_weather_token", "qwerty")

@@ -8,9 +8,13 @@ import (
 	"github.com/DiscoreMe/sadbot/dict"
 	"github.com/DiscoreMe/sadbot/weather"
 	"github.com/sirupsen/logrus"
+	"math/rand"
+	"time"
 )
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	cfg := config.New()
 	calc := calculator.NewCal()
 	d := dict.NewDict()
@@ -20,11 +24,12 @@ func main() {
 		logrus.Fatalln("redis connect", err)
 	}
 	b, err := bot.NewBot(bot.BotSettings{
-		Token:   cfg.Token,
-		Calc:    calc,
-		Weather: w,
-		Cache:   c,
-		Dict:    d,
+		Token:        cfg.Token,
+		Calc:         calc,
+		Weather:      w,
+		Cache:        c,
+		Dict:         d,
+		ScreenConfig: cfg.Screen,
 	})
 	if err != nil {
 		logrus.Fatalln("initial bot", err)
