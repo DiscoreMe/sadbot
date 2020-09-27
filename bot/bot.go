@@ -94,6 +94,8 @@ func (b *Bot) CmdHandler(m *tb.Message) {
 		b.SpeakAddHandler(m)
 	case "эбауте":
 		b.about(m)
+	case "правда":
+		b.TruthHandler(m)
 	case "кл":
 		b.CalcHandler(m)
 	case "скрин":
